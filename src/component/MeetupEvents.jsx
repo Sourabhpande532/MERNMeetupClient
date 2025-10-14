@@ -1,16 +1,19 @@
 import { Link } from "react-router-dom";
 import useFetch from "../useFetch";
+import { useState } from "react";
 
 export const MeetupEvents = () => {
+    const [type,setType] = useState("Both");
     const { data, loading, error } = useFetch( "https://mern-meetup-server.vercel.app/eventList" );
-    // console.log(data) 
+    const {data:modeData} = useFetch(`http://localhost:4000/events/${type}`)
+    const filterList = type === "Both" ? data : modeData;
     return (
         <div>
             <section className="d-flex justify-content-between">
                 <h2 className=" fw-semibold">Meetup Events</h2>
                 <div className="">
-                    <select className="form-control">
-                        <option>Select event type</option>
+                    <select onChange={ ( e ) => setType( e.target.value ) } className="form-control">
+                        <option value=''>Select event type</option>
                         <option>Online</option>
                         <option>Offline</option>
                         <option>Both</option>
@@ -18,11 +21,12 @@ export const MeetupEvents = () => {
                 </div>
             </section>
             <pre></pre>
+
             { loading && <p>Loading...</p> }
             { error && <p>Error occured</p> }
 
             <section className="row g-4">
-                { data?.map( ( each ) => (
+                { Array.isArray( filterList ) && filterList?.map( ( each ) => (
                     <div key={ each._id } className="col-md-4">
                         <Link to={ `/details/${ each._id }` }
                             className="text-decoration-none text-dark"
@@ -49,7 +53,7 @@ export const MeetupEvents = () => {
                                     </span>
 
                                 </div>
-                                {/* img-batch section */}
+                                {/* img-batch section */ }
                                 <div className="card-body">
                                     <small className="text-muted d-block mb-1">{ each.startAt }</small>
                                     <p className="fw-semibold mb-1">{ each.title }</p>
