@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 function App() {
   // Shared states for both component
-  const [search, setSearch] = useState( "Tech Conference" );
+  const [search, setSearch] = useState( "" );
   const [type, setType] = useState( "Both" )
   return (
     <div className="container bg-color">
