@@ -8,12 +8,13 @@ export const MeetupEvents = ( { search, type, setType } ) => {
 
     if ( search && search.trim() !== "" ) {
         // Search by title first
-        apiUrl = `https://mern-meetup-server.vercel.app/events/title/${ search }`;
+        apiUrl = `https://mern-meetup-server.vercel.app/events/title/${ search }` || `https://mern-meetup-server.vercel.app/events/tag/${ search }`;
     } else if ( type === "Online" || type === "Offline" ) {
         // Filter by event type
         apiUrl = `https://mern-meetup-server.vercel.app/events/${ type }`;
     } else if ( type === "Both" || type === "" ) {
         // Show all events
+
         apiUrl = "https://mern-meetup-server.vercel.app/eventList";
     }
     const { data, loading, error } = useFetch( apiUrl );

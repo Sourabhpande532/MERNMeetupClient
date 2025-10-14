@@ -1,42 +1,50 @@
 import { useParams } from "react-router-dom";
 import useFetch from "../useFetch";
-import { Header } from "./Header";
 
-export const DetailsEvent = () => {
-    const { data, loading, error } = useFetch(
-        "https://mern-meetup-server.vercel.app/eventList"
-    );
+export const DetailsEvent = ( { search } ) => {
     const { eventId } = useParams();
-    const findDataById = data?.find( ( each ) => each._id == eventId );
+    let apiUrl = "https://mern-meetup-server.vercel.app/eventList";
+    if ( search && search.trim() !== "" ) {
+        apiUrl = `https://mern-meetup-server.vercel.app/events/title/${ search }`;
+    }
+    const { data, loading, error } = useFetch( apiUrl );
+    console.log(data);
+    
+    let findDataById = null;
+    if(Array.isArray(data)){
+        findDataById = data?.find((each)=>each._id == eventId);
+    }else if(data && data._id){
+          // when backend returns a single object instead of array
+        findDataById = data;
+    }
     // console.log( findDataById );
-    if (loading) return <p className="text-center mt-4">Loading...</p>;
-  if (error) return <p className="text-danger text-center mt-4">Database error</p>;
+    if ( loading ) return <p className="text-center mt-4">Loading...</p>;
+    if ( error ) return <p className="text-danger text-center mt-4">Database error</p>;
+    if(!findDataById) return <p className="text-center mt-4 text-danger">No data found.</p>
 
     return (
         <div className='container bg-color py-4'>
-            <Header />
-            <hr />
             <section>
                 { findDataById ? (
                     <section className="row g-4 mt-3">
-                    {/* Left section: event details */}
+                        {/* Left section: event details */ }
                         <div className="col-lg-8">
                             <h2 className="display-6 fw-semibold mb-2">{ findDataById.title }</h2>
                             <p className="text-muted mb-1">Hosted By:</p>
                             <h6 className="fw-bold mb-3">{ findDataById.organizer }</h6>
 
                             <div className="mb-4">
-                            <img
-                                src={ findDataById.thumbnail }
-                                alt={ findDataById.title }
-                                className="img-fluid rounded shadow-sm w-100"
-                                style={ { maxHeight: "350px", objectFit: "cover" } }
-                            />
+                                <img
+                                    src={ findDataById.thumbnail }
+                                    alt={ findDataById.title }
+                                    className="img-fluid rounded shadow-sm w-100"
+                                    style={ { maxHeight: "350px", objectFit: "cover" } }
+                                />
                             </div>
 
                             <h3 className="fw-semibold mt-3 mb-2"><strong>Details</strong></h3>
 
-                            <p className="text-secondary py-3" style={{maxWidth: "85%"}}>{ findDataById.description }</p>
+                            <p className="text-secondary py-3" style={ { maxWidth: "85%" } }>{ findDataById.description }</p>
 
                             <h3 className="fw-bold">Additional Information:</h3>
                             <p><strong>Dress Code:</strong> { findDataById.dressCode }</p>
@@ -66,9 +74,9 @@ export const DetailsEvent = () => {
                             <div className="row g-3">
                                 { findDataById.speakers.map( ( each ) => (
                                     <div key={ each._id } className="col-md-6 text-center">
-                                        <div className="card h-100  w-100 shadow-sm">
+                                        <div className="card h-100 w-100 shadow-sm">
                                             <div className="align-item-center py-2">
-                                                <img src="https://placehold.co/100" className="rounded-circle img-fluid"
+                                                <img src={each.imgUrl} className="rounded-circle img-fluid"
                                                     style={ { width: "150px", height: "150px" } }
                                                 />
                                             </div>
