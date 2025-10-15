@@ -12,7 +12,6 @@ const formatDate = (dateString) => {
     year: "numeric",    // 2025
     hour: "2-digit",    // 7
     minute: "2-digit",
-    second: "2-digit",
     hour12: true,
     timeZoneName: "short", // IST
   });
