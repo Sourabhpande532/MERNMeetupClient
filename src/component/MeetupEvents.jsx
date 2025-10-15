@@ -1,6 +1,23 @@
 import { Link } from "react-router-dom";
 import useFetch from "../useFetch";
 
+
+const formatDate = (dateString) => {
+  if (!dateString) return "Date not available";
+  const date = new Date(dateString);
+  return date.toLocaleString("en-IN", {
+    weekday: "short",   // Thu
+    month: "short",     // Jul
+    day: "numeric",     // 13
+    year: "numeric",    // 2025
+    hour: "2-digit",    // 7
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+    timeZoneName: "short", // IST
+  });
+};
+
 export const MeetupEvents = ( { search, type, setType } ) => {
     // choose URL based on input 
     // ✅ Choose URL based on search and type
@@ -69,7 +86,7 @@ export const MeetupEvents = ( { search, type, setType } ) => {
                                 </div>
                                 {/* img-batch section */ }
                                 <div className="card-body">
-                                    <small className="text-muted d-block mb-1">{ each.startAt }</small>
+                                    <small className="text-muted d-block mb-1">{formatDate(each.startAt)}</small>
                                     <p className="fw-semibold mb-1">{ each.title }</p>
                                 </div>
                             </div>

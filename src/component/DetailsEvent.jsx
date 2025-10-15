@@ -1,6 +1,23 @@
 import { useParams } from "react-router-dom";
 import useFetch from "../useFetch";
 
+
+const formatDate = (dateString) => {
+  if (!dateString) return "Date not available";
+  const date = new Date(dateString);
+  return date.toLocaleString("en-IN", {
+    weekday: "short",   // Thu
+    month: "short",     // Jul
+    day: "numeric",     // 13
+    year: "numeric",    // 2025
+    hour: "2-digit",    // 7
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+    timeZoneName: "short", // IST
+  });
+};
+
 export const DetailsEvent = ({ search }) => {
   const { eventId } = useParams();
 
@@ -79,7 +96,7 @@ export const DetailsEvent = ({ search }) => {
           <div className="card shadow-lg p-4">
             ⌚
             <small className="text-secondary d-block">
-              {event.startAt} - {event.endAt}
+              { formatDate(event.startAt)} - {formatDate(event.endAt)}
             </small>
             🔍
             <small className="text-secondary d-block">
