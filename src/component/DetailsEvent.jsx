@@ -23,7 +23,8 @@ export const DetailsEvent = ({ search }) => {
   // ✅ Determine correct API URL
   let apiUrl = "";
   if (search && search.trim() !== "") {
-    apiUrl = `https://mern-meetup-server.vercel.app/events/title/${search}`;
+    // search for title+tag 
+    apiUrl = `https://mern-meetup-server.vercel.app/events/search/${search}`;
   } else if (eventId) {
     apiUrl = `https://mern-meetup-server.vercel.app/events/details/${eventId}`;
   } else {
